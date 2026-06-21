@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<!-- saved from url=(0089)file:///C:/Users/ADMINI~1/AppData/Local/Temp/Rar$EXa14884.33247/Mini%20project/login.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Health Sphere 360</title>
+    <link href="./Login - Health Sphere 360_files/css2" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00FFF0;
+            --primary-light: #00D4FF;
+            --accent: #FF0080;
+            --bg-primary: #0A0A0F;
+            --bg-secondary: #13131A;
+            --bg-tertiary: #1A1A24;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --border: #2D2D3A;
+            --shadow: rgba(0, 255, 240, 0.15);
+            --success: #00FF88;
+            --danger: #FF0055;
+            --glow: rgba(0, 255, 240, 0.5);
+            --glow-accent: rgba(255, 0, 128, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Archivo', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(0, 255, 240, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 0, 128, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Brand watermark */
+        body::after {
+            content: '360°';
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            font-size: 8rem;
+            font-weight: 900;
+            color: rgba(0, 255, 240, 0.02);
+            pointer-events: none;
+            z-index: 0;
+            font-family: 'Archivo', sans-serif;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-box {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 100px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .auth-logo h1::before {
+            content: '⚫';
+            font-size: 2rem;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px var(--glow)) drop-shadow(0 0 30px var(--glow-accent));
+            animation: rotateSphere 10s linear infinite;
+        }
+
+        @keyframes rotateSphere {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .auth-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .role-option {
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-tertiary);
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+            background: rgba(0, 255, 240, 0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .role-option.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 255, 240, 0.15), rgba(255, 0, 128, 0.1));
+            box-shadow: 0 0 30px var(--glow), inset 0 0 20px rgba(0, 255, 240, 0.1);
+        }
+
+        .role-option-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 10px var(--glow));
+        }
+
+        .role-option-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-field label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-field input {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Archivo', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 255, 240, 0.1), 0 0 20px var(--glow);
+            background: var(--bg-secondary);
+        }
+
+        .form-field input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .auth-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--bg-primary);
+            box-shadow: 0 4px 15px var(--shadow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .auth-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--shadow), 0 0 40px var(--glow);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-switch {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .auth-switch a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .error-message {
+            background: rgba(255, 0, 85, 0.1);
+            color: var(--danger);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-message {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--success);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .demo-credentials {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .demo-credentials h4 {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .demo-credentials p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0.25rem 0;
+        }
+
+        .demo-credentials code {
+            background: var(--bg-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--primary);
+            font-family: monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-box {
+                padding: 2rem;
+            }
+
+            .auth-logo h1 {
+                font-size: 2rem;
+            }
+
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>Health Sphere 360</h1>
+                <p>Complete Care Management</p>
+            </div>
+            
+            <h2 class="auth-title">Welcome Back</h2>
+            <p class="auth-subtitle">Sign in to access your account</p>
+            
+            <div class="role-selector">
+                <div class="role-option active" data-role="doctor" onclick="selectRole(&#39;doctor&#39;)">
+                    <div class="role-option-icon">👨‍⚕️</div>
+                    <div class="role-option-title">Doctor</div>
+                </div>
+                <div class="role-option" data-role="patient" onclick="selectRole(&#39;patient&#39;)">
+                    <div class="role-option-icon">👤</div>
+                    <div class="role-option-title">Patient</div>
+                </div>
+            </div>
+
+            <div class="error-message" id="error"></div>
+            <div class="success-message" id="success-message"></div>
+            
+            <form class="auth-form" id="loginForm">
+                <div class="form-field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" name="email" required="">
+                </div>
+                
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" name="password" required="">
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember-me">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="file:///C:/Users/ADMINI~1/AppData/Local/Temp/Rar$EXa14884.33247/Mini%20project/forgot-password.html" id="forgotPasswordLink" class="forgot-password">Forgot Password?</a>
+
+                </div>
+                
+                <button type="submit" class="auth-btn" id="loginBtn">
+                    <span style="position: relative; z-index: 1;">Sign In</span>
+                </button>
+            </form>
+            
+            <div class="auth-divider">OR</div>
+            
+            <div class="auth-switch">
+                Don't have an account? <a href="file:///C:/Users/ADMINI~1/AppData/Local/Temp/Rar$EXa14884.33247/Mini%20project/register.html">Create Account</a>
+            </div>
+
+
+            
+
+    <!-- Scripts -->
+    <script src="./Login - Health Sphere 360_files/api.js"></script>
+    <script src="./Login - Health Sphere 360_files/auth.js"></script>
+    <script src="./Login - Health Sphere 360_files/utils.js"></script>
+    <script src="./Login - Health Sphere 360_files/login.js"></script>
+
+
+</div></div></body></html>
